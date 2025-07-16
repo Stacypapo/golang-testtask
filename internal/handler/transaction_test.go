@@ -38,7 +38,7 @@ func TestHandler_Send(t *testing.T) {
 				s.EXPECT().TransferFunds(req.From, req.To, req.Amount).Return(nil)
 			},
 			expectedStatusCode:   http.StatusOK,
-			expectedResponseBody: `{"status":"success"}` + "\n",
+			expectedResponseBody: `{"status":"success","message":"Transaction completed"}` + "\n",
 		},
 		{
 			name:                 "Invalid JSON",
