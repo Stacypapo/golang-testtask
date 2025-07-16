@@ -1,0 +1,133 @@
+basePath: /
+definitions:
+  models.CreateTransactionRequest:
+    properties:
+      amount:
+        example: 10
+        minimum: 0.01
+        type: number
+      from:
+        example: e240d825d255af751f5f55af8d9671be
+        type: string
+      to:
+        example: abdf2236c0a3b4e2639b3e182d994c88e
+        type: string
+    type: object
+  models.StatusResponse:
+    properties:
+      message:
+        example: Transaction completed
+        type: string
+      status:
+        example: success
+        type: string
+    type: object
+  models.Transaction:
+    properties:
+      amount:
+        type: number
+      from:
+        type: string
+      id:
+        type: integer
+      to:
+        type: string
+    type: object
+  models.Wallet:
+    properties:
+      address:
+        type: string
+      balance:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для управления транзакциями и кошельками
+  title: Payment System API
+  version: "1.0"
+paths:
+  /api/send:
+    post:
+      consumes:
+      - application/json
+      description: Переводит денежные средства с одного кошелька на другой
+      parameters:
+      - description: Данные транзакции
+        in: body
+        name: transaction
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status
+          schema:
+            $ref: '#/definitions/models.StatusResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Wallet not found
+          schema:
+            type: string
+      summary: Отправить денежные средства
+  /api/transactions:
+    get:
+      description: Возвращает N последних по времени переводов средств
+      parameters:
+      - description: Количество транзакций
+        in: query
+        name: count
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transaction'
+            type: array
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Получить последние транзакции
+  /api/wallet/{address}/balance:
+    get:
+      description: Возвращает баланс по адресу кошелька
+      parameters:
+      - description: Адрес кошелька
+        in: path
+        name: address
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "400":
+          description: Invalid address
+          schema:
+            type: string
+        "404":
+          description: Wallet not found
+          schema:
+            type: string
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Получить баланс кошелька
+swagger: "2.0"
