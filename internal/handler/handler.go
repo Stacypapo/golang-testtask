@@ -22,6 +22,7 @@ func (h *Handler) InitRoutes() *http.ServeMux {
 	router.HandleFunc("POST /api/send", h.Send)
 	router.HandleFunc("GET /api/transactions", h.GetLast)
 	router.HandleFunc("GET /api/wallet/{address}/balance", h.GetBalance)
+	router.HandleFunc("GET /api/wallets", h.GetAllWallets)
 	router.Handle("/swagger/", httpSwagger.WrapHandler)
 	return router
 }

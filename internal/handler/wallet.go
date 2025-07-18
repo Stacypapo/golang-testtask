@@ -46,3 +46,30 @@ func (h *Handler) GetBalance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
+
+// GetAllwallets Получение списка всех кошельков в БД
+// @Summary Получить список всех кошельков (для удобства проверки работоспособности API проверяющими)
+// @Description Возвращает все кошельки из БД
+// @Produce json
+// @Success 200 {array} models.Wallet
+// @Failure 500 {string} string "Server error"
+// @Router /api/wallets [get]
+func (h *Handler) GetAllWallets(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	wallets, err := h.services.GetAllWallets()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if wallets == nil {
+		wallets = []models.Wallet{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(wallets)
+}

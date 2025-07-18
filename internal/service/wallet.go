@@ -35,6 +35,16 @@ func (s *WalletService) GetWalletBalance(address string) (float64, error) {
 	return wallet.Balance, nil
 }
 
+// GetAllWallets возвращает все кошельки в базе данных
+func (s *WalletService) GetAllWallets() ([]models.Wallet, error) {
+	var wallets []models.Wallet
+	wallets, err := s.repo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	return wallets, nil
+}
+
 // CreateRandomWallets создает count кошельков со случайными адресами и balance у.е. на них.
 func (s *WalletService) CreateRandomWallets(count int, balance float64) error {
 	for i := 0; i < count; i++ {

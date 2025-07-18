@@ -130,4 +130,22 @@ paths:
           schema:
             type: string
       summary: Получить баланс кошелька
+  /api/wallets:
+    get:
+      description: Возвращает все кошельки из БД
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Wallet'
+            type: array
+        "500":
+          description: Server error
+          schema:
+            type: string
+      summary: Получить список всех кошельков (для удобства проверки работоспособности
+        API проверяющими)
 swagger: "2.0"

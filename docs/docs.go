@@ -141,6 +141,32 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/wallets": {
+            "get": {
+                "description": "Возвращает все кошельки из БД",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Получить список всех кошельков (для удобства проверки работоспособности API проверяющими)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Wallet"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

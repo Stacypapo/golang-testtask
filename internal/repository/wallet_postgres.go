@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"golangTestTask/internal/models"
 )
 
@@ -53,6 +54,31 @@ func (r *WalletPostgres) Get(address string) (*models.Wallet, error) {
 		return nil, err
 	}
 	return &wallet, nil
+}
+
+// Get возвращает все кошельки в БД PostgreSQL.
+func (r *WalletPostgres) GetAll() ([]models.Wallet, error) {
+	query := `SELECT address, balance FROM wallets`
+	wallets := make([]models.Wallet, 0)
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var w models.Wallet
+		if err := rows.Scan(&w.Address, &w.Balance); err != nil {
+			return nil, fmt.Errorf("failed to scan row: %w", err)
+		}
+		wallets = append(wallets, w)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during rows iteration: %w", err)
+	}
+	return wallets, nil
 }
 
 // Existence проверяет существуют ли какие-либо кошельки в БД PostgreSQL.

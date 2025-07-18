@@ -5,11 +5,15 @@ import (
 	"golangTestTask/internal/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Wallet interface {
 	// CreateWallet создает новый кошелек.
 	CreateWallet(models.Wallet) error
 	// GetWalletBalance возвращает баланс кошелька по его адресу
 	GetWalletBalance(address string) (float64, error)
+	// GetAllWallets возвращает баланс кошелька по его адресу
+	GetAllWallets() ([]models.Wallet, error)
 	// CreateRandomWallets создает count кошельков со случайными адресами и balance у.е. на них.
 	CreateRandomWallets(count int, balance float64) error
 	// BaseWallets создает count кошельков со случайными адресами и balance у.е. на них если они еще не созданы.

@@ -5,6 +5,8 @@ import (
 	"golangTestTask/internal/models"
 )
 
+//go:generate mockgen -source=repository.go -destination=mocks/mock.go
+
 type Wallet interface {
 	// Create сохраняет новый кошелек в БД.
 	Create(wallet *models.Wallet) error
@@ -12,6 +14,8 @@ type Wallet interface {
 	Update(wallet *models.Wallet) error
 	// Get возвращает кошелек по адресу.
 	Get(address string) (*models.Wallet, error)
+	// GetAll возвращает все кошельки в БД.
+	GetAll() ([]models.Wallet, error)
 	// Existence проверяет существуют ли какие-либо кошельки в БД.
 	Existence() bool
 }
